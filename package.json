@@ -1,0 +1,26 @@
+{
+  "name": "graphql-lab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bernljung/graphql-lab.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bernljung/graphql-lab/issues"
+  },
+  "homepage": "https://github.com/bernljung/graphql-lab#readme",
+  "dependencies": {
+    "hapi": "18.1.0",
+    "graphql": "14.1.1",
+    "request": "2.88.0",
+    "request-promise": "4.2.4",
+    "dataloader": "1.4.0"
+  }
+}

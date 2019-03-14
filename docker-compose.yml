@@ -1,0 +1,103 @@
+version: '2.1'
+services:
+  # App
+  app:
+    build: .
+    ports:
+      - 8000:80
+    networks:
+      graphql-lab:
+
+
+  # Generic mock
+  generic-mock:
+    build: ./GenericMock
+    ports:
+      - 8001:80
+    environment:
+      CONFIG:  |-
+        {
+          "routes": [
+            {
+              "path": "/users",
+              "body": [{
+                "id": 1,
+                "username": "user1"
+              }, {
+                "id": 2,
+                "username": "user2"
+              }, {
+                "id": 3,
+                "username": "user3"
+              }]
+            },
+            {
+              "path": "/users/1",
+              "body": {
+                "id": 1,
+                "username": "user1",
+                "teamId": 1
+              }
+            },
+            {
+              "path": "/users/2",
+              "body": {
+                "id": 2,
+                "username": "user2",
+                "teamId": 2
+              }
+            },
+            {
+              "path": "/users/3",
+              "body": {
+                "id": 3,
+                "username": "user3",
+                "teamId": 2
+              }
+            },
+            {
+              "path": "/teams",
+              "body": [{
+                "id": 1,
+                "name": "team1"
+              }, {
+                "id": 2,
+                "name": "team2"
+              }]
+            },
+            {
+              "path": "/teams/1",
+              "body": {
+                "id": 1,
+                "name": "team1",
+                "users": [{
+                  "id": 1,
+                  "name": "user1"
+                }]
+              }
+            },
+            {
+              "path": "/teams/2",
+              "body": {
+                "id": 2,
+                "name": "team2",
+                "users": [{
+                  "id": 2,
+                  "name": "user2"
+                },{
+                  "id": 3,
+                  "name": "user3"
+                }]
+              }
+            }
+          ]
+        }
+    networks:
+      graphql-lab:
+        aliases:
+          - generic-mock.dev
+
+networks:
+  graphql-lab:
+    external:
+      name: graphql-lab
