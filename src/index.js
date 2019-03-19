@@ -1,96 +1,91 @@
 'use strict';
 
 const Hapi = require('hapi')
-const request = require('request-promise')
 const DataLoader = require('dataloader')
 const { graphql, buildSchema } = require('graphql')
+const user = require('./modules/user')
+const team = require('./modules/team')
 
 const schema = buildSchema(`
-  type Team {
-    id: Int
+  input TeamInput {
     name: String
   }
 
-  type User {
-    id: Int
+  type Team {
+    id: String
+    name: String
+  }
+
+  type Status {
+    status: String
+  }
+
+  input UserInput {
     username: String
-    teamId: Int
+    teamId: String
+  }
+
+  type User {
+    id: String
+    username: String
+    teamId: String
     team: Team
   }
 
   type Query {
-    user(id: Int): User
-    team(id: Int): Team
+    allUsers: [User]
+    allTeams: [Team]
+    getUser(id: String): User
+    getTeam(id: String): Team
+  }
+
+  type Mutation {
+    createUser(input: UserInput): User
+    updateUser(id: String, input: UserInput): User
+    deleteUser(id: String): Status
+
+    createTeam(input: TeamInput): Team
+    updateTeam(id: String, input: TeamInput): Team
+    deleteTeam(id: String): Status
   }
 `)
 
-class Team {
-  constructor(id) {
-    this.id = id
-    this.data = {
-      name: null
-    }
-  }
-
-  async fetchData() {
-    const options = {
-      uri: `http://generic-mock/teams/${this.id}`,
-      method: 'GET',
-      json: true
-    }
-    const res = await request(options)
-    this.data.name = res.name
-  }
-
-  async name() {
-    await this.fetchData()
-    return this.data.name
-  }
-}
-
-class User {
-  constructor(id) {
-    this.id = id
-    this.data = {
-      username: null,
-      teamId: null
-    }
-  }
-
-  async fetchData() {
-    const options = {
-      uri: `http://generic-mock/users/${this.id}`,
-      method: 'GET',
-      json: true
-    }
-    const res = await request(options)
-    this.data.username = res.username
-    this.data.teamId = res.teamId
-  }
-
-  async username() {
-    await this.fetchData()
-    return this.data.username
-  }
-
-  async teamId() {
-    await this.fetchData()
-    return this.data.teamId
-  }
-
-  async team() {
-    await this.fetchData()
-    return new Team(this.data.teamId)
-  }
-}
-
 const root = {
-  user: (args) => {
-    return new User(args.id)
+  allUsers: () => {
+    return user.all()
   },
-  team: (args) => {
-    return new Team(args.id)
-  }
+  getUser: (args) => {
+    return user.getById(args.id)
+  },
+  createUser: (args) => {
+    const input = JSON.parse(JSON.stringify(args.input))
+    return user.create(input)
+  },
+  updateUser: (args) => {
+    const input = JSON.parse(JSON.stringify(args.input))
+    return user.update(args.id, input)
+  },
+  deleteUser: (args) => {
+    return user.delete(args.id)
+  },
+
+  allTeams: () => {
+    return team.all()
+  },
+  getTeam: (args) => {
+    return team.getById(args.id)
+  },
+  createTeam: (args) => {
+    const input = JSON.parse(JSON.stringify(args.input))
+    return team.create(input)
+  },
+  updateTeam: (args) => {
+    const input = JSON.parse(JSON.stringify(args.input))
+    return team.update(args.id, input)
+  },
+  deleteTeam: (args) => {
+    return team.delete(args.id)
+  },
 }
 
 const server=Hapi.server({
@@ -118,14 +113,14 @@ server.route([{
 }])
 
 const start =  async function() {
-    try {
-        await server.start()
-    }
-    catch (err) {
-        console.log(err)
-        process.exit(1)
-    }
-    console.log('Server running at:', server.info.uri)
+  try {
+    await server.start()
+  }
+  catch (err) {
+    console.log(err)
+    process.exit(1)
+  }
+  console.log('Server running at:', server.info.uri)
 }
 
 start()

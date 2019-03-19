@@ -11,91 +11,40 @@ services:
 
   # Generic mock
   generic-mock:
-    build: ./GenericMock
+    build: ./RESTMock
     ports:
       - 8001:80
-    environment:
-      CONFIG:  |-
-        {
-          "routes": [
-            {
-              "path": "/users",
-              "body": [{
-                "id": 1,
-                "username": "user1"
-              }, {
-                "id": 2,
-                "username": "user2"
-              }, {
-                "id": 3,
-                "username": "user3"
-              }]
-            },
-            {
-              "path": "/users/1",
-              "body": {
-                "id": 1,
-                "username": "user1",
-                "teamId": 1
-              }
-            },
-            {
-              "path": "/users/2",
-              "body": {
-                "id": 2,
-                "username": "user2",
-                "teamId": 2
-              }
-            },
-            {
-              "path": "/users/3",
-              "body": {
-                "id": 3,
-                "username": "user3",
-                "teamId": 2
-              }
-            },
-            {
-              "path": "/teams",
-              "body": [{
-                "id": 1,
-                "name": "team1"
-              }, {
-                "id": 2,
-                "name": "team2"
-              }]
-            },
-            {
-              "path": "/teams/1",
-              "body": {
-                "id": 1,
-                "name": "team1",
-                "users": [{
-                  "id": 1,
-                  "name": "user1"
-                }]
-              }
-            },
-            {
-              "path": "/teams/2",
-              "body": {
-                "id": 2,
-                "name": "team2",
-                "users": [{
-                  "id": 2,
-                  "name": "user2"
-                },{
-                  "id": 3,
-                  "name": "user3"
-                }]
-              }
-            }
-          ]
-        }
     networks:
       graphql-lab:
         aliases:
           - generic-mock.dev
+    environment:
+      INITIAL_DATA:  |-
+        {
+          "users": [{
+            "id": "bd77bbac-824e-4648-bdfa-dc8688ffc285",
+            "username": "user1",
+            "teamId": "e3765aeb-4b6a-4db8-b72c-58fd6c8913eb"
+          },
+          {
+            "id": "4dd10263-f92f-48f1-8f0b-a035aa06747f",
+            "username": "user2",
+            "teamId": "e3765aeb-4b6a-4db8-b72c-58fd6c8913eb"
+          },
+          {
+            "id": "01f8380f-7ab6-44a3-82a1-998bc319eff5",
+            "username": "user3",
+            "teamId": "3461ad0d-ab32-470c-a97c-bd53719aa3a9"
+          }],
+          "teams": [{
+            "id": "e3765aeb-4b6a-4db8-b72c-58fd6c8913eb",
+            "name": "team1"
+          },
+          {
+            "id": "3461ad0d-ab32-470c-a97c-bd53719aa3a9",
+            "name": "team2"
+          }]
+        }
 
 networks:
   graphql-lab:
