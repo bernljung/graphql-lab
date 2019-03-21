@@ -24,16 +24,25 @@ services:
           "users": [{
             "id": "bd77bbac-824e-4648-bdfa-dc8688ffc285",
             "username": "user1",
+            "firstname": "Olle",
+            "lastname": "Karlsson",
+            "age": 47,
             "teamId": "e3765aeb-4b6a-4db8-b72c-58fd6c8913eb"
           },
           {
             "id": "4dd10263-f92f-48f1-8f0b-a035aa06747f",
             "username": "user2",
+            "firstname": "Lasse",
+            "lastname": "Nilsson",
+            "age": 31,
             "teamId": "e3765aeb-4b6a-4db8-b72c-58fd6c8913eb"
           },
           {
             "id": "01f8380f-7ab6-44a3-82a1-998bc319eff5",
             "username": "user3",
+            "firstname": "Johan",
+            "lastname": "Andersson",
+            "age": 28,
             "teamId": "3461ad0d-ab32-470c-a97c-bd53719aa3a9"
           }],
           "teams": [{

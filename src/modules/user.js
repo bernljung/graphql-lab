@@ -7,12 +7,15 @@ class User {
     this.data = {
       id: params.id,
       username: params.username,
+      firstname: params.firstname,
+      lastname: params.lastname,
+      age: params.age,
       teamId: params.teamId
     }
   }
 
   async fetchData() {
-    if(this.data.id && this.data.username && this.data.teamId) {
+    if(this.data.id && this.data.username && this.data.teamId && this.data.firstname && this.data.lastname && this.data.age) {
       return
     }
     const options = {
@@ -22,6 +25,9 @@ class User {
     }
     const res = await request(options)
     this.data.username = res.username
+    this.data.firstname = res.firstname
+    this.data.lastname = res.lastname
+    this.data.age = res.age
     this.data.teamId = res.teamId
   }
 
@@ -32,6 +38,21 @@ class User {
   async username() {
     await this.fetchData()
     return this.data.username
+  }
+
+  async firstname() {
+    await this.fetchData()
+    return this.data.firstname
+  }
+
+  async lastname() {
+    await this.fetchData()
+    return this.data.lastname
+  }
+
+  async age() {
+    await this.fetchData()
+    return this.data.age
   }
 
   async teamId() {
@@ -73,9 +94,7 @@ const createUser = async input => {
     json: true,
     body: input
   }
-  console.log('Options', options)
   const res = await request(options)
-  console.log('Res', res)
   return new User(res)
 }
 

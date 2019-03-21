@@ -22,12 +22,18 @@ const schema = buildSchema(`
 
   input UserInput {
     username: String
+    firstname: String
+    lastname: String
+    age: Int
     teamId: String
   }
 
   type User {
     id: String
     username: String
+    firstname: String
+    lastname: String
+    age: Int
     teamId: String
     team: Team
   }
